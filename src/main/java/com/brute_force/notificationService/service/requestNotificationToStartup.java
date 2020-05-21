@@ -8,9 +8,6 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 public class requestNotificationToStartup {
     @MongoId
     private ObjectId id;
-
-
-
     private String firstName;
     private String email;
 

@@ -1,6 +1,7 @@
 package com.brute_force.notificationService.controller;
 
-import com.brute_force.notificationService.repository.requestNotificationToStartupRepository;
+import com.brute_force.notificationService.repository.requestNotificationToMentorRepository;
+import com.brute_force.notificationService.service.requestNotificationToStartup;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,21 +16,20 @@ import java.util.HashMap;
 import java.util.Properties;
 
 @RestController
-@RequestMapping("startup/sendmail")
-public class requestNotificationToStartupController {
-    private requestNotificationToStartupRepository requestnotificationtostartuprepository;
+@RequestMapping("/mentor/sendmail")
+public class requestNotificationToMentorController {
+    private requestNotificationToMentorRepository requestnotificationtomentorrepository;
 
-    public requestNotificationToStartupController(requestNotificationToStartupRepository requestnotificationtostartuprepository) {
-        this.requestnotificationtostartuprepository = requestnotificationtostartuprepository;
+    public requestNotificationToMentorController(requestNotificationToMentorRepository requestnotificationtomentorrepository) {
+        this.requestnotificationtomentorrepository = requestnotificationtomentorrepository;
     }
-
 
     @GetMapping("/{id}")
     private void sendMail(@PathVariable("id") String id)throws AddressException, MessagingException, IOException {
         final HashMap name = new HashMap();
-        this.requestnotificationtostartuprepository.findById(id).map(requestNotificationToStartup -> {
-            String name1 = requestNotificationToStartup.getFirstName();
-            String email1 = requestNotificationToStartup.getEmail();
+        this.requestnotificationtomentorrepository.findById(id).map(requestNotificationToMentor -> {
+            String name1 = requestNotificationToMentor.getFirstName();
+            String email1 = requestNotificationToMentor.getEmail();
             name.put("name",name1);
             name.put("email",email1);
             return name;
@@ -52,7 +52,7 @@ public class requestNotificationToStartupController {
             message.setFrom(new InternetAddress("startupnotification1@gmail.com"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress((String) name.get("email")));
             message.setSubject("Test Notification Service");
-            message.setText("Hello,"+name.get("name")+"  has requested you for the connection");
+            message.setText("Hello,you have connection request from the "+name.get("name"));
             Transport.send(message);
         }catch (MessagingException e){
             e.printStackTrace();
